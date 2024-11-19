@@ -1,0 +1,52 @@
+image:
+  repository: jeromeguillaume/kong-saxon
+  tag: "3.8.0.0-12.5"
+
+secretVolumes:
+- kong-cluster-cert
+
+admin:
+  enabled: false
+
+env:
+  role: data_plane
+  database: "off"
+  cluster_mtls: pki
+  cluster_control_plane: ba704b38aa.eu.cp0.konghq.com:443
+  cluster_server_name: ba704b38aa.eu.cp0.konghq.com
+  cluster_telemetry_endpoint: ba704b38aa.eu.tp0.konghq.com:443
+  cluster_telemetry_server_name: ba704b38aa.eu.tp0.konghq.com
+  cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
+  cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
+  lua_ssl_trusted_certificate: system
+  konnect_mode: "on"
+  vitals: "off"
+  nginx_worker_processes: "4"
+  upstream_keepalive_max_requests: "100000"
+  nginx_http_keepalive_requests: "100000"
+  proxy_access_log: "off"
+  dns_stale_ttl: "3600"
+  plugins: bundled,soap-xml-request-handling,soap-xml-response-handling
+  
+plugins:
+  configMaps:
+  - pluginName: soap-xml-request-handling
+    name: soap-xml-request-handling
+  - pluginName: soap-xml-response-handling
+    name: soap-xml-response-handling
+  - pluginName: soap-xml-handling-lib
+    name: soap-xml-handling-lib
+    subdirectories:
+    - name: libxml2ex
+      path: libxml2ex
+    - name: libxslt
+      path: libxslt
+
+ingressController:
+  enabled: false
+  installCRDs: false
+
+resources:
+  requests:
+    cpu: 1
+    memory: "2Gi"
