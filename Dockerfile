@@ -1,4 +1,4 @@
-FROM kong/kong-gateway:3.4.3.12
+FROM kong/kong-gateway:3.4.3.13
 
 # Copy the plugin directories to their respective locations in Kong
 COPY ./kong/plugins/soap-xml-handling-lib /usr/local/share/lua/5.1/kong/plugins/soap-xml-handling-lib
@@ -10,4 +10,4 @@ COPY ./kong/saxon/so/amd64 /usr/local/lib/kongsaxon
 
 # Set environment variables for library path and plugins
 ENV LD_LIBRARY_PATH=/usr/local/lib/kongsaxon
-ENV KONG_PLUGINS=bundled,soap-xml-request-handling
+ENV KONG_PLUGINS=bundled,soap-xml-request-handling,soap-xml-response-handling
